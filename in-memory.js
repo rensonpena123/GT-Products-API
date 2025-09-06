@@ -14,7 +14,6 @@ let products = [
 
 //PART 2 POST
 //Endpoint to create a product
-
 app.post('/products', (req, res) => {
     const newId = Math.max(...products.map(p => p.id)) + 1;
 
@@ -24,7 +23,7 @@ app.post('/products', (req, res) => {
         price: req.body.price
     };
 
-    products.push(newProduct);
+    products.push(newProduct);  
     res.status(201).json(newProduct);
 });
 
