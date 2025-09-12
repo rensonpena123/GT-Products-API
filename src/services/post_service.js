@@ -1,3 +1,5 @@
+import NotFoundError from "../utils/NotFoundError";
+
 let posts = [
     { id: 1, title: 'First Post', content: 'This is the first post.' },
     { id: 2, title: 'Second Post', content: 'This is the second post.' }
@@ -9,7 +11,11 @@ export const getAllPosts = () => {
 };
 
 export const getPostById = (id) => {
-    return posts.find(p => p.id === id);
+    const post = posts.find(p => p.id === id);
+    if(!post) {
+        throw new NotFoundError(`Post with id ${id} not found`);
+    }
+    return post;
 };
 
 export const createPost = (postData) => {
@@ -21,7 +27,7 @@ export const createPost = (postData) => {
 export const updatePost = (id, postData) => {
     const postIndex = posts.findIndex(p => p.id === id);
     if (postIndex === -1) {
-        return null;
+        throw new NotFoundError(`Post with id ${id} not found`);
     }
     posts[postIndex] = { ...posts[postIndex], ...postData };
     return posts[postIndex];
@@ -30,7 +36,7 @@ export const updatePost = (id, postData) => {
 export const deletePost = (id) => {
     const postIndex = posts.findIndex(p => p.id === id);
     if (postIndex === -1) {
-        return false;
+       throw new NotFoundError(`Post with id ${id} not found`);
     }
     posts.splice(postIndex, 1);
     return true;
@@ -39,7 +45,7 @@ export const deletePost = (id) => {
 export const patchPost = (id, postData) => {
         const postIndex = posts.findIndex(p => p.id === id);
     if (postIndex === -1) {
-        return null;
+        throw new NotFoundError(`Post with id ${id} not found`);
     }
     posts[postIndex] = { ...posts[postIndex], ...postData };
     return posts[postIndex];
