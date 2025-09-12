@@ -4,13 +4,26 @@ import asyncHandler from '../../../utils/asyncHandler.js';
 
 export const getAllPosts = asyncHandler(async (req, res) => {
     const posts = postService.getAllPosts();
-    res.json(posts);
+
+    const v1Posts = posts.map(post => ({
+        id: post.id,
+        title: post.title,
+        content: post.content
+
+    }));
+    res.json(v1Posts);
 });
 
 export const getPostById = asyncHandler(async (req, res) => {
     const postId = parseInt(req.params.id, 10);
-    const post = postService.getPostById(postId); 
-    res.json(post);
+    const post = postService.getPostById(postId);
+
+    res.json({
+        id: post.id,
+        title: post.title,
+        content: post.content
+
+    });
 });
 
 export const createPost = asyncHandler(async (req, res) => {
@@ -20,7 +33,13 @@ export const createPost = asyncHandler(async (req, res) => {
     }
     const { title, content } = req.body;
     const newPost = postService.createPost({ title, content });
-    res.status(201).json(newPost);
+    
+    res.status(201).json({
+        id: newPost.id,
+        title: newPost.title,
+        content: newPost.content
+
+    });
 });
 
 export const updatePost = asyncHandler(async (req, res) => {

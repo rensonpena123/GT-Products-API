@@ -1,4 +1,4 @@
-import NotFoundError from "../utils/NotFoundError";
+import NotFoundError from "../utils/NotFoundError.js";
 
 let posts = [
     { id: 1, title: 'First Post', content: 'This is the first post.' },
@@ -19,7 +19,7 @@ export const getPostById = (id) => {
 };
 
 export const createPost = (postData) => {
-    const newPost = { id: nextId++, ...postData };
+    const newPost = { id: nextId++, ...postData, author: postData.author };
     posts.push(newPost);
     return newPost;
 };
