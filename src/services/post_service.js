@@ -1,5 +1,5 @@
-import NotFoundError from "../utils/NotFoundError.js";
 import pool from '../config/db.js';
+import { ApiError } from '../utils/ApiError.js';
 
 export const getAllPosts = async () => {
     const [posts] = await pool.query('SELECT * FROM posts');
@@ -8,7 +8,10 @@ export const getAllPosts = async () => {
 
 export const getPostById = async (id) => {
     const [rows] = await pool.query('SELECT * FROM posts WHERE id = ?', [id]);
-    return rows[0] || null;
+    if (!rows[0]) {
+        throw new ApiError(404, "Post not found");
+    }
+    return rows[0];
 };
 
 export const createPost = async (postData) => {
@@ -28,9 +31,17 @@ export const updatePost = async (id, postData) => {
         [title, content, id]
     );
     if (result.affectedRows === 0) {
-        return null
+        throw new ApiError(404, "Post not found");
     }
     return getPostById(id);
+};
+
+export const deletePost = async (id) => {
+    const [result] = await pool.query('DELETE FROM posts WHERE id = ?', [id]);
+    if (result.affectedRows === 0) {
+        throw new ApiError(404, "Post not found");
+    }
+    return true;
 };
 
 export const partiallyUpdatePost = async (id, updates) => {
@@ -49,7 +60,7 @@ export const partiallyUpdatePost = async (id, updates) => {
         );
 
         if (result.affectedRows === 0) {
-            return null;
+           throw new ApiError(404, "Post not found");
         }
         return getPostById(id);
 };
