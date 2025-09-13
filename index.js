@@ -1,12 +1,15 @@
 import express from 'express';
+import dotenv from 'dotenv';
 import v1PostRoutes from './src/api/v1/routes/post_routes.js';
 import v2PostRoutes from './src/api/v2/routes/post_routes.js';
 import errorHandler from './src/middleware/errorHandle.js';
 import deprecationWarning from './src/middleware/deprecation.js';  
 import commentRoutes from './src/api/v1/routes/comments_routes.js';
 
+dotenv.config();
+
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
