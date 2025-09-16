@@ -11,6 +11,34 @@ export const validatePost = [
         .notEmpty()
         .withMessage('Content is required'),
 
+    body('authorId')
+        .isInt()
+        .withMessage('A valid authorId is required'),
+
+    (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({errors: errors.array()});  
+        }
+        next();
+    },
+];
+
+export const validateComment = [
+    body ('content')
+        .trim()
+        .notEmpty()
+        .withMessage('Content is required'),
+
+    body('postId')
+        .trim()
+        .notEmpty()
+        .withMessage('A valid post ID is required'),
+
+    body('authorId')
+        .isInt()
+        .withMessage('A valid authorId is required'),
+
     (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {

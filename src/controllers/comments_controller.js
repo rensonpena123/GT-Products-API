@@ -1,30 +1,36 @@
-
 import * as commentService from '../services/comments_service.js';
+import asyncHandler from 'express-async-handler';
+import { ApiResponse } from '../utils/ApiResponse.js';
 
-export const getAllComments = (req, res) => {
-    const comments = commentService.getAllComments();
-    res.json(comments);
-};
+export const createComment = asyncHandler(async (req, res) => {
 
-export const getCommentsByPostId = (req, res) => {
-    const postId = parseInt(req.params.postId, 10);
-    const comments = commentService.getCommentsByPostId(postId);
-    res.json(comments);
-};
+    const newComment = await commentService.createComment(req.body);
+    return res
+        .status(201)
+        .json(new ApiResponse(201, newComment, "Comment created successfully"));
+});
 
-export const createCommentForPost = (req, res) => {
-    const postId = parseInt(req.params.postId, 10);
-    const { text } = req.body;
+export const getCommentById = asyncHandler(async (req, res) => {
+    const commentId = parseInt(req.params.id, 10);
+    const comment = await commentService.getCommentById(userId);
 
-    if (!text) {
-        return res.status(400).json({ message: 'Comment text is required.' });
-    }
+    return res
+        .status(200)
+        .json(new ApiResponse(200, comment, "Comment retrieved successfully"));
+});
 
-    const newComment = commentService.createComment(postId, { text });
+export const getAllComments = asyncHandler(async (req, res) => {
+    const comments = await commentService.getAllComments();
+    return res
+        .status(200)
+        .json(new ApiResponse(200, comments, "Comments retrieved successfully"));
+});
 
-    if (!newComment) {
-        return res.status(404).json({ message: 'Post not found.' });
-    }
+export const getCommentsByUserId = asyncHandler(async (req, res) => {
+    const postId = parseInt(req.params.userId, 10);
+    const comments = await commentService.getCommentsByPostId(postId);
 
-    res.status(201).json(newComment);
-};
+    return res
+        .status(200)
+        .json(new ApiResponse(200, comments, "Comments retrieved successfully"));
+});

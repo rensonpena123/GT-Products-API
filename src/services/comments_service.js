@@ -1,59 +1,41 @@
-// src/services/comments_service.js
+import pool from '../config/db.js';
+import { ApiError } from '../utils/ApiError.js';
 
-let comments = [
-    { id: 1, text: 'Great first post!', postId: 1 },
-    { id: 2, text: 'I agree, very insightful.', postId: 1 },
-    { id: 3, text: 'This is a comment on the second post.', postId: 2 },
-];
-let nextId = 4;
-
-import { getPostById } from './post_service.js';
-
-export const getAllComments = () => {
+export const getAllComments = async () => {
+    const [comments] = await pool.query('SELECT * FROM comments');
     return comments;
 };
 
-export const getCommentsByPostId = (postId) => {
-    return comments.filter(c => c.postId === postId);
-};
-
-export const createComment = (postId, commentData) => {
-    const post = getPostById(postId);
-    if (!post) {
-        return null; // Post doesn't exist
+export const getCommentById = async (id) => {
+    const [rows] = await pool.query('SELECT * FROM comments WHERE id = ?', [id]);
+    if (!rows[0]) {
+        throw new ApiError(500, "Comment not found");
     }
-    const newComment = { id: nextId++, postId, ...commentData };
-    comments.push(newComment);
-    return newComment;
+    return rows[0];
 };
 
-export const getCommentById = (id) => {
-    return comments.find(c => c.id === id);
-};
 
-export const updateComment = (id, commentData) => {
-    const commentIndex = comments.findIndex(c => c.id === id);
-    if (commentIndex === -1) {
-        return null;
+export const createComment = async (commentData) => {
+    try {
+        const {content, postId, authorId} = commentData;
+        const [result] = await pool.query(
+            'INSERT INTO comments (content, postId, authorId) VALUES (?, ?, ?)',
+            [content, postId, authorId]
+        );
+        
+        if (!result.affectedRows) {
+            throw new ApiError(500, "Failed to create comment");
+        }
+        
+        const newCommentId = result.insertId;
+        return getCommentById(newCommentId);
+        
+    } catch (error) {
+        if (error.code === 'ER_NO_REFERENCED_ROW_2') {
+            throw new ApiError(400, 'Post ID or Author ID does not exist');
+        }
+        
+        throw error;
     }
-    comments[commentIndex] = { ...comments[commentIndex], ...commentData };
-    return comments[commentIndex];
 };
 
-export const deleteComment = (id) => {
-    const commentIndex = comments.findIndex(c => c.id === id);
-    if (commentIndex === -1) {
-        return false;
-    }
-    comments.splice(commentIndex, 1);
-    return true;
-};
-
-export const patchComment = (id, commentData) => {
-    const commentIndex = comments.findIndex(c => c.id === id);
-    if (commentIndex === -1) {
-        return null;
-    }
-    comments[commentIndex] = { ...comments[commentIndex], ...commentData };
-    return comments[commentIndex];
-};
