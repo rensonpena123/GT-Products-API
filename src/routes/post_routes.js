@@ -16,8 +16,8 @@ const updatePostRules = [
 ];
 
 // Post routes
-router.get('/', validatePost, postController.getAllPosts);
-router.get('/:id', validatePost, postController.getPostById);
+router.get('/', postController.getAllPosts);
+router.get('/:id', postController.getPostById);
 router.post('/', createPostRules, postController.createPost);
 router.put('/:id', validatePost, updatePostRules, postController.updatePost);
 router.patch('/:id', validatePost, postController.patchPost);
