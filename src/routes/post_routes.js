@@ -1,7 +1,9 @@
 import { Router } from 'express';
 import { body } from 'express-validator';
 import * as postController from '../controllers/post_controller.js';
+import * as commentController from '../controllers/comments_controller.js'
 import { validatePost } from '../middlewares/validator_middleware.js';
+import { validateComment } from '../middlewares/validator_middleware.js';
 
 const router = Router();
 
@@ -18,13 +20,13 @@ const updatePostRules = [
 // Post routes
 router.get('/', postController.getAllPosts);
 router.get('/:id', postController.getPostById);
+router.get('/:postId/comments', commentController.getCommentsByPostId);
 router.post('/', createPostRules, postController.createPost);
 router.put('/:id', validatePost, updatePostRules, postController.updatePost);
 router.patch('/:id', validatePost, postController.patchPost);
 router.delete('/:id', postController.deletePost);
+router.post('/:postId/comments', validateComment, commentController.createCommentForPost);
 
-// Comment routes - commented out until you create the comments controller
 // router.get('/:postId/comments', commentController.getCommentsByPostId);
-// router.post('/:postId/comments', commentController.createCommentForPost);
 
 export default router;

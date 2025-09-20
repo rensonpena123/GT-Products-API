@@ -25,19 +25,30 @@ export const validatePost = [
 ];
 
 export const validateComment = [
-    body ('content')
-        .trim()
-        .notEmpty()
-        .withMessage('Content is required'),
+// PART 1 MINDTERMS
+    // body ('content')
+    //     .trim()
+    //     .notEmpty()
+    //     .withMessage('Content is required'),
 
-    body('postId')
+    // body('postId')
+    //     .trim()
+    //     .notEmpty()
+    //     .withMessage('A valid post ID is required'),
+
+    // body('authorId')
+    //     .isInt()
+    //     .withMessage('A valid authorId is required')
+    //     .isLength({min: 1}),
+
+    body('text')
         .trim()
         .notEmpty()
-        .withMessage('A valid post ID is required'),
+        .withMessage('Comment text is required'),
 
     body('authorId')
-        .isInt()
-        .withMessage('A valid authorId is required'),
+        .isInt({ min: 1 })
+        .withMessage('A valid author ID is required.'),
 
     (req, res, next) => {
         const errors = validationResult(req);
