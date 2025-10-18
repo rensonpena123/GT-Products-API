@@ -7,6 +7,8 @@ import userRoutes from './src/routes/user_routes.js';
 import commentRoutes from './src/routes/comments_routes.js';
 import { testConnection } from './src/config/db.js';
 import { errorHandler } from './src/middlewares/errorHandler.middleware.js';
+import authRoutes from './src/routes/auth_routes.js';
+
 
 const app = express();
 const port = 3000;
@@ -15,6 +17,7 @@ app.use(express.json());
 
 //post routes
 //app.use('/posts', postRoutes); 
+app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/comments', commentRoutes);
