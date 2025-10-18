@@ -20,12 +20,16 @@ export const getPostById = asyncHandler(async (req, res) => {
 });
 
 export const createPost = asyncHandler(async (req, res) => {
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const newPost = await postService.createPost(req.body);
+    const authorId = req.user.id;
+    const postData = req.body;
+
+    const newPost = await postService.createPost(postData, authorId); 
     return res
         .status(201)
         .json(new ApiResponse(201, newPost, "Post created successfully"));

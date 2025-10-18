@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import postRoutes from './src/routes/post_routes.js'; 
 import userRoutes from './src/routes/user_routes.js';

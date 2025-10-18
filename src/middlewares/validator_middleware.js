@@ -11,10 +11,6 @@ export const validatePost = [
         .notEmpty()
         .withMessage('Content is required'),
 
-    body('authorId')
-        .isInt()
-        .withMessage('A valid authorId is required'),
-
     (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -80,4 +76,13 @@ export const validateRegistration = [
         }
         next();
     },
+];
+
+export const validateLogin = [
+    body('email')
+        .trim()
+        .notEmpty().withMessage('Email is required')
+        .isEmail().withMessage('Must be a valid email'),
+    body('password')
+        .notEmpty().withMessage('Password is required')
 ];
