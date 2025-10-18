@@ -25,13 +25,14 @@ router.get('/:postId/comments', commentController.getCommentsByPostId);
 
 router.post('/', authMiddleware, validatePost, postController.createPost);
 
+router.put('/:id', authMiddleware, validatePost, postController.updatePost);
+router.delete('/:id', authMiddleware, postController.deletePost);
+
 // router.post('/', createPostRules, postController.createPost);
-router.put('/:id', validatePost, updatePostRules, postController.updatePost);
+// router.put('/:id', validatePost, updatePostRules, postController.updatePost);
 router.patch('/:id', validatePost, postController.patchPost);
-router.delete('/:id', postController.deletePost);
+// router.delete('/:id', postController.deletePost);
 router.post('/:postId/comments', validateComment, commentController.createCommentForPost);
-
-
 
 // router.get('/:postId/comments', commentController.getCommentsByPostId);
 

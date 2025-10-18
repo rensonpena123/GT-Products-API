@@ -9,7 +9,7 @@ import userRoutes from './src/routes/user_routes.js';
 // import deprecationWarning from './src/middleware/deprecation.js';  
 import commentRoutes from './src/routes/comments_routes.js';
 import { testConnection } from './src/config/db.js';
-import { errorHandler } from './src/middlewares/errorHandler.middleware.js';
+import { errorHandler } from './src/middlewares/errorHandler_middleware.js';
 import authRoutes from './src/routes/auth_routes.js';
 
 
