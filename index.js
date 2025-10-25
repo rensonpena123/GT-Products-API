@@ -11,12 +11,15 @@ import commentRoutes from './src/routes/comments_routes.js';
 import { testConnection } from './src/config/db.js';
 import { errorHandler } from './src/middlewares/errorHandler_middleware.js';
 import authRoutes from './src/routes/auth_routes.js';
+import photoRoutes from './src/routes/photo_routes.js';
 
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
+
+app.use('/uploads', express.static('uploads'));
 
 //post routes
 //app.use('/posts', postRoutes); 
@@ -25,6 +28,8 @@ app.use('/api/posts', postRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/comments', commentRoutes);
 //app.use('/api/v2/posts', v2PostRoutes); 
+app.use('/api/photos', photoRoutes);
+
 
 app.use(errorHandler); 
 
