@@ -30,7 +30,8 @@ export const createCommentForPost = asyncHandler(async (req, res) => {
         .json(new ApiResponse(201, newComment, "Comment created successfully"));
 });
 
-//MIDTERMS PART 1
+
+// //MIDTERMS PART 1
 // export const createComment = asyncHandler(async (req, res) => {
 
 //     const newComment = await commentService.createComment(req.body);
